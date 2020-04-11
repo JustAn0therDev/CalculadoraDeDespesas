@@ -9,11 +9,8 @@ namespace CalculadoraDeDespesas
 {
     public partial class MainForm : Form
     {
-        private const decimal TotalOfFixedSpendings = 3895.53M;
-        private const decimal TotalOfVariableSpendings = 800M;
-        private const decimal TotalOfAllSpendings = TotalOfFixedSpendings + TotalOfVariableSpendings;
 
-        private readonly SpendingsCalculator _spendingsCalculator;
+        private readonly ICalculator _spendingsCalculator;
 
         private decimal _momTotalIncome { get; set; }
         private decimal _dadTotalIncome { get; set; }
@@ -58,16 +55,17 @@ namespace CalculadoraDeDespesas
 
         public MainForm()
         {
+            _spendingsCalculator = new SpendingsCalculator();
+
             InitializeComponent();
             ShowAllConstantSpendingsOnForm();
-            _spendingsCalculator = new SpendingsCalculator(TotalOfFixedSpendings, TotalOfVariableSpendings);
         }
 
         private void ShowAllConstantSpendingsOnForm()
         {
-            TotalOfFixedSpendingsTextBox.Text = TotalOfFixedSpendings.ParseNumberToBrazilianCurrencyFormat();
-            TotalOfVariableSpendingsTextBox.Text = TotalOfVariableSpendings.ParseNumberToBrazilianCurrencyFormat();
-            TotalSpendings.Text = TotalOfAllSpendings.ParseNumberToBrazilianCurrencyFormat();
+            TotalOfFixedSpendingsTextBox.Text = _spendingsCalculator.TotalOfFixedSpendings.ParseNumberToBrazilianCurrencyFormat();
+            TotalOfVariableSpendingsTextBox.Text = _spendingsCalculator.TotalOfVariableSpendings.ParseNumberToBrazilianCurrencyFormat();
+            TotalSpendings.Text = _spendingsCalculator.TotalOfAllSpendings.ParseNumberToBrazilianCurrencyFormat();
         }
 
         private void CalculateSpendingOnAnyIncomeValueChange()

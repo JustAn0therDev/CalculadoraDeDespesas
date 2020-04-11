@@ -1,46 +1,37 @@
 ﻿namespace CalculadoraDeDespesas
 {
-    public class SpendingsCalculator
+    public class SpendingsCalculator : ICalculator
     {
-        private decimal TotalOfFixedSpendings { get; set; }
-        private decimal TotalOfVariableSpendings { get; set; }
-
-        public SpendingsCalculator(decimal totalOfFixedSpendings, decimal totalOfVariableSpendings)
-        {
-            TotalOfFixedSpendings = totalOfFixedSpendings;
-            TotalOfVariableSpendings = totalOfVariableSpendings;
-        }
+        public decimal TotalOfFixedSpendings => 3895.53M;
+        public decimal TotalOfVariableSpendings => 800M;
+        public decimal TotalOfAllSpendings => TotalOfFixedSpendings + TotalOfVariableSpendings;
 
         public decimal CalculateFixedSpendings(decimal sumOfAllIncomes)
         {
-            decimal result = sumOfAllIncomes - TotalOfFixedSpendings;
+            if (CanWeAlreadyPayFixedSpendings(sumOfAllIncomes))
+                return 0;
+            return sumOfAllIncomes - TotalOfFixedSpendings;
+        }
 
-            if (WeCanAlreadyPayTheSpendings(result) || HasAlreadyCalculatedFixedSpendings(sumOfAllIncomes))
-                return 0.0M;
-
-            return result;
+        private bool CanWeAlreadyPayFixedSpendings(decimal sumOfAllIncomes)
+        {
+            bool stillValueLeftAfterPayingFixedSpendings = sumOfAllIncomes - TotalOfFixedSpendings >= 0;
+            return stillValueLeftAfterPayingFixedSpendings;
         }
 
         public decimal CalculateVariableSpendings(decimal sumOfAllIncomes)
         {
-            if (HasAlreadyCalculatedVariableSpendings(sumOfAllIncomes))
-                return 0.0M;
-
-            if (!HasAlreadyCalculatedFixedSpendings(sumOfAllIncomes))
+            if (CanWeAlreadyPayVariableSpendings(sumOfAllIncomes))
+                return 0;
+            if (!CanWeAlreadyPayFixedSpendings(sumOfAllIncomes))
                 return TotalOfVariableSpendings;
-
-            decimal result = (sumOfAllIncomes - TotalOfFixedSpendings) - TotalOfVariableSpendings;
-
-            return result;
+            return (sumOfAllIncomes - TotalOfFixedSpendings) - TotalOfVariableSpendings;
         }
 
-        private bool HasAlreadyCalculatedFixedSpendings(decimal sumOfAllIncomes)
-            => sumOfAllIncomes - TotalOfFixedSpendings >= 0;
-
-        private bool HasAlreadyCalculatedVariableSpendings(decimal sumOfAllIncomes)
-            => (sumOfAllIncomes - TotalOfFixedSpendings) - TotalOfVariableSpendings >= 0;
-
-        private bool WeCanAlreadyPayTheSpendings(decimal spendingValue) 
-            => spendingValue == 0;
+        private bool CanWeAlreadyPayVariableSpendings(decimal sumOfAllIncomes)
+        {
+            bool stillValueLeftAfterPayingVariableSpendings = (sumOfAllIncomes - TotalOfFixedSpendings) - TotalOfVariableSpendings >= 0;
+            return stillValueLeftAfterPayingVariableSpendings;
+        }
     }
 }

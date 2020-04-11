@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICalculator.cs" />
     <Compile Include="SpendingsCalculator.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
