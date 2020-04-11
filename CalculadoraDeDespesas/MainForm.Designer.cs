@@ -1,6 +1,6 @@
 ﻿namespace CalculadoraDeDespesas
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -196,7 +196,7 @@
             this.TitleLabel.TabIndex = 7;
             this.TitleLabel.Text = "Insira o valor que cada pessoa irá usar (em Reais):";
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -209,7 +209,7 @@
             this.Controls.Add(this.RuanLabel);
             this.Controls.Add(this.CarlosAlbertoLabel);
             this.Controls.Add(this.AlmiraLabel);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Calculadora de Despesas";
             this.GroupBoxOfResults.ResumeLayout(false);
             this.GroupBoxOfResults.PerformLayout();
