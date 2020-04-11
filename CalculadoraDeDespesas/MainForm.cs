@@ -9,13 +9,9 @@ namespace CalculadoraDeDespesas
 {
     public partial class MainForm : Form
     {
-        #region Constants
-
         private const decimal TotalOfFixedSpendings = 3895.53M;
         private const decimal TotalOfVariableSpendings = 800M;
         private const decimal TotalOfAllSpendings = TotalOfFixedSpendings + TotalOfVariableSpendings;
-
-        #endregion
 
         private readonly SpendingsCalculator _spendingsCalculator;
 
@@ -60,16 +56,12 @@ namespace CalculadoraDeDespesas
         private decimal SumOfAllIncomes
             => new List<decimal> { MomTotalIncome, DadTotalIncome, MyTotalIncome }.Sum(income => income);
 
-        #region Constructors
-
         public MainForm()
         {
             InitializeComponent();
             ShowAllConstantSpendingsOnForm();
             _spendingsCalculator = new SpendingsCalculator(TotalOfFixedSpendings, TotalOfVariableSpendings);
         }
-
-        #endregion
 
         private void ShowAllConstantSpendingsOnForm()
         {
