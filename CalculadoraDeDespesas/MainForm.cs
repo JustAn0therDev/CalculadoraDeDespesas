@@ -1,17 +1,19 @@
 ﻿using CalculadoraDeDespesas.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CalculadoraDeDespesas.Data_Structures;
 
 namespace CalculadoraDeDespesas
 {
     public partial class MainForm : Form
     {
-
         private readonly ICalculator _spendingsCalculator;
-
+        private static string _savedValuesFile => "savedValues.json";
         private decimal _momTotalIncome { get; set; }
         private decimal _dadTotalIncome { get; set; }
         private decimal _myTotalIncome { get; set; }
@@ -58,7 +60,43 @@ namespace CalculadoraDeDespesas
             _spendingsCalculator = new SpendingsCalculator();
 
             InitializeComponent();
+            AttachNotifierToInputFields();
+            CheckSavedValues();
             ShowAllConstantSpendingsOnForm();
+        }
+
+        private void CheckSavedValues()
+        {
+            string savedValuesInJson = File.ReadAllText(_savedValuesFile);
+
+            Incomes savedIncomes = JsonConvert.DeserializeObject<Incomes>(savedValuesInJson);
+
+            MomTotalIncome = savedIncomes.MomTotalIncome;
+            DadTotalIncome = savedIncomes.DadTotalIncome;
+            MyTotalIncome = savedIncomes.MyTotalIncome;
+
+            ShowPreviouslySavedValuesOnAllInputs();
+        }
+
+        private void ShowPreviouslySavedValuesOnAllInputs()
+        {
+            AlmiraTextBox.Text = MomTotalIncome.ToString("F0");
+            CarlosTextBox.Text = DadTotalIncome.ToString("F0");
+            RuanTextBox.Text = MyTotalIncome.ToString("F0");
+        }
+
+        private void SaveValuesToJsonFile(object sender, EventArgs e)
+        {
+            Incomes incomes = new Incomes
+            {
+                DadTotalIncome = DadTotalIncome,
+                MomTotalIncome = MomTotalIncome,
+                MyTotalIncome = MyTotalIncome
+            };
+
+            string incomesToJson = JsonConvert.SerializeObject(incomes);
+
+            File.WriteAllText(_savedValuesFile, incomesToJson);
         }
 
         private void ShowAllConstantSpendingsOnForm()
@@ -66,6 +104,13 @@ namespace CalculadoraDeDespesas
             TotalOfFixedSpendingsTextBox.Text = _spendingsCalculator.TotalOfFixedSpendings.ParseNumberToBrazilianCurrencyFormat();
             TotalOfVariableSpendingsTextBox.Text = _spendingsCalculator.TotalOfVariableSpendings.ParseNumberToBrazilianCurrencyFormat();
             TotalSpendings.Text = _spendingsCalculator.TotalOfAllSpendings.ParseNumberToBrazilianCurrencyFormat();
+        }
+
+        private void AttachNotifierToInputFields()
+        {
+            CarlosTextBox.TextChanged += new EventHandler(SaveValuesToJsonFile);
+            AlmiraTextBox.TextChanged += new EventHandler(SaveValuesToJsonFile);
+            RuanTextBox.TextChanged += new EventHandler(SaveValuesToJsonFile);
         }
 
         private void CalculateSpendingOnAnyIncomeValueChange()
