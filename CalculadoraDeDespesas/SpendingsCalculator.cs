@@ -8,12 +8,12 @@
 
         public decimal CalculateFixedSpendings(decimal sumOfAllIncomes)
         {
-            if (CanWeAlreadyPayFixedSpendings(sumOfAllIncomes))
+            if (WeCanAlreadyPayFixedSpendings(sumOfAllIncomes))
                 return 0;
             return sumOfAllIncomes - TotalOfFixedSpendings;
         }
 
-        private bool CanWeAlreadyPayFixedSpendings(decimal sumOfAllIncomes)
+        private bool WeCanAlreadyPayFixedSpendings(decimal sumOfAllIncomes)
         {
             bool stillValueLeftAfterPayingFixedSpendings = sumOfAllIncomes - TotalOfFixedSpendings >= 0;
             return stillValueLeftAfterPayingFixedSpendings;
@@ -21,14 +21,14 @@
 
         public decimal CalculateVariableSpendings(decimal sumOfAllIncomes)
         {
-            if (CanWeAlreadyPayVariableSpendings(sumOfAllIncomes))
+            if (WeCanAlreadyPayVariableSpendings(sumOfAllIncomes))
                 return 0;
-            if (!CanWeAlreadyPayFixedSpendings(sumOfAllIncomes))
+            if (!WeCanAlreadyPayFixedSpendings(sumOfAllIncomes))
                 return TotalOfVariableSpendings;
             return (sumOfAllIncomes - TotalOfFixedSpendings) - TotalOfVariableSpendings;
         }
 
-        private bool CanWeAlreadyPayVariableSpendings(decimal sumOfAllIncomes)
+        private bool WeCanAlreadyPayVariableSpendings(decimal sumOfAllIncomes)
         {
             bool stillValueLeftAfterPayingVariableSpendings = (sumOfAllIncomes - TotalOfFixedSpendings) - TotalOfVariableSpendings >= 0;
             return stillValueLeftAfterPayingVariableSpendings;
